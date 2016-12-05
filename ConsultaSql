@@ -1,0 +1,50 @@
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.Row
+
+
+object SqlConsulta {
+  
+  def main(args: Array[String]) {
+   
+    
+     System.setProperty("SPARK_YARN_MODE", "true") 
+     
+    val sparkConfiguration = new SparkConf();
+    sparkConfiguration.setMaster("yarn-client");
+    sparkConfiguration.setAppName("test-spark-job");
+    //sparkConfiguration.setJars(Array("/ejecutar.jar"));
+    sparkConfiguration.set("spark.yarn.jar","hdfs:///user/cloudera/spark-assembly-1.6.0-hadoop2.4.0.jar")
+    sparkConfiguration.set("spark.hadoop.fs.defaultFS", "hdfs://quickstart.cloudera");
+    sparkConfiguration.set("spark.hadoop.dfs.nameservices", "quickstart.cloudera:8020");
+    sparkConfiguration.set("spark.hadoop.yarn.resourcemanager.hostname", "quickstart.cloudera");
+    sparkConfiguration.set("spark.hadoop.yarn.resourcemanager.address", "quickstart.cloudera:8032");
+ 
+    val sc: SparkContext = new SparkContext(sparkConfiguration)
+    
+   /* SAVE CONSULT AS PARQUET
+    * case class Person(name: String, age: Int, sex:String)
+    val data = Seq(Person("Jack", 25,"M"), Person("Jill", 25,"F"), Person("Jess", 24,"F"))
+    
+    val df = data.toDF()
+    
+    import org.apache.spark.sql.SaveMode
+    df.select("name", "age", "sex").write.mode(SaveMode.Append).format("parquet").save("/tmp/person")
+   */
+   
+    val sqlcontext = new SQLContext(sc)
+    import sqlcontext.implicits._
+   
+    val values = sc.parallelize(List(1,2,3,4,5)).toDF("line")
+    values.show()
+    
+    //val sqlContext = new org.apache.spark.sql.hive.HiveContext(sc)
+    //sqlContext.sql("selct * from customer limit 10").collect().foreach(println)
+ 
+   sc.stop()
+  }
+  
+  
+}
