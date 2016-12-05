@@ -1,0 +1,36 @@
+package com.experianejemplo.SparkPrueba;
+
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
+
+import java.util.Arrays;
+
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
+
+public class prueba {
+
+	
+public static void main(String[] args) {
+	    
+		SparkConf sparkConf = new SparkConf();
+		 
+		sparkConf.setAppName("Spark");
+		sparkConf.setMaster("local");
+ 
+		JavaSparkContext context = new JavaSparkContext(sparkConf);
+ 
+		JavaRDD<Integer> numbersRDD = context.parallelize(Arrays.asList(1,2,3));
+		
+		JavaRDD<Integer> result = numbersRDD.map(new Function<Integer, Integer>() 
+			{ 
+				public Integer call(Integer x) { return x*x; }
+			});
+		
+		
+		System.out.println(result.collect().toString());
+ 
+		context.close();
+	   
+	   }    
+}
