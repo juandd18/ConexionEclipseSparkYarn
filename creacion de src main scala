@@ -1,0 +1,9 @@
+
+
+//primero
+
+build path -> configure build path -> source -> add folder
+
+//segundo
+
+seleccionar "main" -> create new folder -> scala (folder name) -> dar siguiente NO finish -> add -> **/.scala* 
